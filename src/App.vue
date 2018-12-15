@@ -1,9 +1,12 @@
 
 <template>
   <div id="app">
-    <Title v-bind:title="title"></Title>
-    <Dropdown @change="getWeather()" v-model="selected" v-bind:cities="cities"></Dropdown>
-    <Thermometer v-bind:message="message"></Thermometer>
+    <!--<Dropdown @change="getWeather()" v-model="selected" v-bind:cities="cities"></Dropdown>-->
+    <div>{{currentHour}}</div>
+    <div class="section" v-for="city in weatherArray">
+      <Title v-bind:title="city.name"></Title>
+      <Thermometer v-bind:weather="city.main" v-bind:id="city.id"></Thermometer>
+    </div>
   </div>
 </template>
 
@@ -19,61 +22,26 @@ export default {
   data () {
     return {
       selected: "",
-      title: "Minneapolis",
       cities: [
         {name: 'Minneapolis', id: '5037649'},
         {name: 'Chicago', id: '4887398'},
         {name: 'Kansas City', id: '4273837'}
       ],
-      message: [
-        {
-          text: 'now',
-          temp: '31',
-          active: true
-        },
-        {
-          text: '+1 hour',
-          temp: '32',
-          active: false
-        },
-        {
-          text: '+2 hour',
-          temp: '33',
-          active: false
-        },
-        {
-          text: '+3 hour',
-          temp: '34',
-          active: false
-        },
-        {
-          text: '+4 hour',
-          temp: '30',
-          active: false
-        },
-        {
-          text: '+5 hour',
-          temp: '29',
-          active: false
-        },
-        {
-          text: '+6 hour',
-          temp: '25',
-          active: false
-        }]
+      weatherArray: [],
     }
   },
-  methods: {
-    getWeather(value) {
-      alert('changed: ' + value)
-    },
-  },
   created () {
-    WeatherAPI.getWeatherByCity(5037649)
+    WeatherAPI.getWeatherByGroup()
       .then(data => {
-        console.log(data);
+        this.weatherArray = data.list;
       })
       .catch(error => console.log(error))
+  },
+  computed: {
+    currentHour: function () {
+      let time = new Date();
+      return time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+    }
   }
 }
 </script>

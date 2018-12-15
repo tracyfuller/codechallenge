@@ -1,25 +1,50 @@
 <template>
   <div class='thermometer' id='thermometer'>
-    <div class='hour' v-for="message in message"  v-bind:class="{ active: message.active }">
-      <div>{{message.text}}</div>
-      <div class='temp'>{{message.temp}}</div>
+    <div class="hour active">
+      <div>Now</div>
+      <div class='temp'>{{currentTemp}}&deg;F</div>
+    </div>
+    <div class='hour' v-for="forecast in 2">
+      <div>hour</div> <!-- todo: add hour from forecast -->
+      <div class='temp'>00&deg;F</div> <!-- todo: add temp from forecast -->
     </div>
   </div>
 </template>
 
 <script>
-    export default {
-        name: "Thermometer",
-        props: {message: Array}
+  import WeatherAPI from "../services/api/WeatherAPI";
+
+  export default {
+    name: "Thermometer",
+    props: {
+      weather: Object,
+      id: Number
+    },
+    data() {
+      return {
+        forecast: []
+      }
+    },
+    created() {
+      WeatherAPI.getForecastByCity(this.id)
+        .then(data => {
+          this.forecast = data.list;
+        })
+        .catch(error => console.log(error));
+    },
+    computed: {
+      currentTemp: function () {
+        return Math.round(this.weather.temp);
+      },
     }
+  }
 </script>
 
 <style lang="scss">
   .thermometer {
     border: 1px solid black;
     border-radius: 3.5em;
-    background: rgb(21,167,158);
-    background: linear-gradient(54deg, rgba(21,167,158,1) 0%, rgba(0,214,202,1) 50%, rgba(111,222,215,1) 100%);
+    background: white;
     display: flex;
     align-items: center;
   }
@@ -31,7 +56,8 @@
     text-align: center;
     &.active {
        border-radius: 3.5em;
-       background: white;
+      background: rgb(21,167,158);
+      background: linear-gradient(54deg, rgba(21,167,158,1) 0%, rgba(0,214,202,1) 50%, rgba(111,222,215,1) 100%);
      }
     }
     .hour:first-of-type{
