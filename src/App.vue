@@ -5,7 +5,7 @@
     <div>{{currentHour}}</div>
     <div class="section" v-for="city in weatherArray">
       <Title v-bind:title="city.name"></Title>
-      <Thermometer v-bind:weather="city.main" v-bind:id="city.id"></Thermometer>
+      <Thermometer v-bind:weather="city" v-bind:id="city.id"></Thermometer>
     </div>
   </div>
 </template>

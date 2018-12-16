@@ -4,9 +4,9 @@
       <div>Now</div>
       <div class='temp'>{{currentTemp}}&deg;F</div>
     </div>
-    <div class='hour' v-for="forecast in 2">
-      <div>hour</div> <!-- todo: add hour from forecast -->
-      <div class='temp'>00&deg;F</div> <!-- todo: add temp from forecast -->
+    <div class='hour' v-for="forecast in forecast">
+      <div>{{forecast.dt_txt}}</div> <!-- todo: add hour from forecast -->
+      <div class='temp'>{{forecast.main.temp}}&deg;F</div> <!-- todo: add temp from forecast -->
     </div>
   </div>
 </template>
@@ -28,14 +28,25 @@
     created() {
       WeatherAPI.getForecastByCity(this.id)
         .then(data => {
-          this.forecast = data.list;
+          for ( var i=0 ; i < 6 ; i++ ){
+            this.forecast.push(data.list[i]);
+          }
         })
         .catch(error => console.log(error));
     },
     computed: {
       currentTemp: function () {
-        return Math.round(this.weather.temp);
+        return Math.round(this.weather.main.temp);
       },
+      currentHour: function (timestamp) {
+        return this.formatTime(timestamp);
+      }
+    },
+    methods: {
+      formatTime: function (timestamp) {
+        let time = new Date(timestamp);
+        return time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+      }
     }
   }
 </script>
