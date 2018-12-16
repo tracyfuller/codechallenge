@@ -5,8 +5,8 @@
       <div class='temp'>{{currentTemp}}&deg;F</div>
     </div>
     <div class='hour' v-for="forecast in forecast">
-      <div>{{forecast.dt_txt}}</div> <!-- todo: add hour from forecast -->
-      <div class='temp'>{{forecast.main.temp}}&deg;F</div> <!-- todo: add temp from forecast -->
+      <div>{{forecast.dt_txt}}</div> <!-- todo: format -->
+      <div class='temp'>{{forecast.main.temp}}&deg;F</div> <!-- todo: format -->
     </div>
   </div>
 </template>
