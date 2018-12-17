@@ -1,7 +1,7 @@
 
 <template>
   <div id="app">
-    <!--<Dropdown @change="getWeather()" v-model="selected" v-bind:cities="cities"></Dropdown>-->
+    <Dropdown v-model="selected" v-bind:cities="cities"></Dropdown>
     <div>{{currentHour}}</div>
     <div class="section" v-for="city in weatherArray">
       <Title v-bind:title="city.name"></Title>

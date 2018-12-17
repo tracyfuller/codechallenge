@@ -1,13 +1,18 @@
 <template>
     <select>
-      <option v-for="city in cities" v-bind:value="city.id">{{city.name}}</option>
+      <option @change="signalChange" v-for="city in cities" v-bind:value="city.id">{{city.name}}</option>
     </select>
 </template>
 
 <script>
     export default {
       name: "Dropdown",
-      props: {cities: Array}
+      props: {cities: Array},
+      methods: {
+        signalChange(evt) {
+          this.$emit("change", evt);
+        },
+      }
     }
 </script>
 
